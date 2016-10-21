@@ -1,0 +1,59 @@
+diff --git a/php/PeTheme/PeThemeSlide.php b/php/PeTheme/PeThemeSlide.php
+index 62348a4..7d187c5 100644
+--- a/php/PeTheme/PeThemeSlide.php
++++ b/php/PeTheme/PeThemeSlide.php
+@@ -344,27 +344,27 @@ class PeThemeSlide {
+ 		$buffer = "";
+ 		$image =& $this->master->image;
+ 
++		$strip_line_breaks = array("\r"=>"","\n"=>"");
++		$caption_defaults = array(
++			"x" => 0,
++			"y" => 0,
++			"delay" => 0,
++			"duration" => 1,
++			"style" => "pe-caption-white",
++			"size" => "pe-caption-small",
++			"transition" => "fadeIn",
++			"color" => "",
++			"bgcolor" => "",
++			"bgcolorAlpha" => 0,
++			"custom" => "",
++			"classes" => "",
++			"content" => ""
++		);
++
+ 		if ($captions && is_array($captions)) {
+ 			foreach ($captions as $caption) {
+ 				$style = "";
+-				$caption = (object) shortcode_atts(
+-												   array(
+-														 "x" => 0,
+-														 "y" => 0,
+-														 "delay" => 0,
+-														 "duration" => 1,
+-														 "style" => "pe-caption-white",
+-														 "size" => "pe-caption-small",
+-														 "transition" => "fadeIn",
+-														 "color" => "",
+-														 "bgcolor" => "",
+-														 "bgcolorAlpha" => 0,
+-														 "custom" => "",
+-														 "classes" => "",
+-														 "content" => ""
+-														 ),
+-												   $caption
+-												   );
++				$caption = (object) shortcode_atts( $caption_defaults, $caption	);
+ 
+ 				$style = "";
+ 
+@@ -390,7 +390,7 @@ class PeThemeSlide {
+ 				//$style .= sprintf(" position:absolute;top:%spx;left:%spx;",$caption->y,$caption->x);
+ 				
+ 				if ($caption->custom) {
+-					$style .= sprintf(";%s;",$caption->custom);
++					$style .= sprintf(";%s;",strtr($caption->custom,$strip_line_breaks));
+ 				}
+ 
+ 				if ($style) {
